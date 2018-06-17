@@ -2,7 +2,6 @@ package com.org.andreorg.reportapp.service;
 
 import java.util.Arrays;
 import java.util.HashSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,6 +36,4 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setRoles(new HashSet<Role>(Arrays.asList(employeeRole)));
         employeeRepository.save(employee);
 	}
-	
-
 }
