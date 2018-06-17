@@ -12,6 +12,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Email;
+import org.springframework.data.annotation.Transient;
 
 @Entity
 @DynamicUpdate
@@ -40,6 +44,20 @@ public class Employee {
 	
 	@Column(name = "Address")
 	private String address;
+	
+	@Column(name = "email")
+	@Email(message = "*Please provide a valid Email")
+	@NotEmpty(message = "*Please provide an email")
+	private String email;
+	
+	@Column(name = "password")
+	@Length(min = 5, message = "*Your password must have at least 5 characters")
+	@NotEmpty(message = "*Please provide your password")
+	@Transient
+	private String password;
+	
+	@Column(name = "active")
+	private int active;
 	
 	@Temporal(TemporalType.DATE)
 	private Date crtTimeStamp;
@@ -121,7 +139,31 @@ public class Employee {
 	public void setCrtTimeStamp(Date crtTimeStamp) {
 		this.crtTimeStamp = crtTimeStamp;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
 
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
+	}
+	
 	@Override
 	public String toString() {
 		return "Employee [empID=" + empID + ", firstName=" + firstName + ", lastName=" + lastName + ", salary=" + salary
