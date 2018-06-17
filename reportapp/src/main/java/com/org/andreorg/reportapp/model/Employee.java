@@ -30,25 +30,25 @@ public class Employee {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "EmpID", updatable = false, nullable = false)
+	@Column(name = "emp_id", updatable = false, nullable = false)
 	private int empID;
 
-	@Column(name = "FName", updatable = false, nullable = false)
+	@Column(name = "first_name", updatable = false, nullable = false)
 	private String firstName;
 
-	@Column(name = "LName", updatable = false, nullable = false)
+	@Column(name = "last_name", updatable = false, nullable = false)
 	private String lastName;
 
-	@Column(name = "Salary")
+	@Column(name = "salary")
 	private int salary;
 
-	@Column(name = "DeptID")
+	@Column(name = "dept_id")
 	private int departmentID;
 
-	@Column(name = "PhNumber")
+	@Column(name = "ph_number")
 	private int phoneNumber;
 	
-	@Column(name = "Address")
+	@Column(name = "address")
 	private String address;
 	
 	@Column(name = "email")
@@ -59,14 +59,13 @@ public class Employee {
 	@Column(name = "password")
 	@Length(min = 5, message = "*Your password must have at least 5 characters")
 	@NotEmpty(message = "*Please provide your password")
-	@Transient
 	private String password;
 	
 	@Column(name = "active")
 	private int active;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "emp_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 	
 	@Temporal(TemporalType.DATE)
