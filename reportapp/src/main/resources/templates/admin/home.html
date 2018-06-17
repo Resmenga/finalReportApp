@@ -14,8 +14,7 @@
 	<div class="container">
 	
 		<form th:action="@{/logout}" method="get">
-			<button class="btn btn-md btn-danger btn-block" name="registration"
-				type="Submit">Logout</button>
+			<button class="btn btn-md btn-danger btn-block" type="Submit">Logout</button>
 		</form>    
 		
 		<div class="panel-group" style="margin-top:40px">
@@ -25,6 +24,10 @@
 				</div>
 			</div>
 		</div>
+		
+		<form th:action="@{/admin/addEmployee}" method="get">
+			<button class="btn btn-lg btn-primary btn-block" type="Submit">Create new Employee</button>
+		</form> 
 		
 	</div>
 </body>
