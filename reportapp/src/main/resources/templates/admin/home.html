@@ -3,32 +3,127 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title>Admin Page</title>
+<title>Employees Report App</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
 <body>
 	<div class="container">
-	
+
 		<form th:action="@{/logout}" method="get">
 			<button class="btn btn-md btn-danger btn-block" type="Submit">Logout</button>
-		</form>    
-		
-		<div class="panel-group" style="margin-top:40px">
+		</form>
+
+		<div class="panel-group" style="margin-top: 40px">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<span th:utext="${employeeName}"></span>
 				</div>
 			</div>
 		</div>
-		
+
 		<form th:action="@{/admin/addEmployee}" method="get">
-			<button class="btn btn-lg btn-primary btn-block" type="Submit">Create new Employee</button>
-		</form> 
-		
+			<button class="btn btn-lg btn-primary btn-block" type="Submit">Create
+				new Employee</button>
+		</form>
 	</div>
+
+	<div class="container-fluid">
+		<div class="page-title">
+			<h2>Employee Table</h2>
+		</div>
+		<div class="row">
+			<table class="table datatable">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Address</th>
+						<th>Email</th>
+						<th>Phone Number</th>
+						<th>Department ID</th>
+						<th>Salary</th>
+						<th>Time Stamp</th>
+						<th>Update</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="employee : ${employees}">
+						<td th:text="${employee.empID}">Placeholder</td>
+						<td th:text="${employee.firstName}">Placeholder</td>
+						<td th:text="${employee.lastName}">Placeholder</td>
+						<td th:text="${employee.address}">Placeholder</td>
+						<td th:text="${employee.email}">Placeholder</td>
+						<td th:text="${employee.phoneNumber}">Placeholder</td>
+						<td th:text="${employee.departmentID}">Placeholder</td>
+						<td th:text="${employee.salary}">Placeholder</td>
+						<td th:text="${employee.crtTimeStamp}">Placeholder</td>
+						<td><button type="button"
+								class="btn btn-primary btn-condensed">
+								<i class="glyphicon glyphicon-folder-open"></i>
+							</button></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="row">
+				<div class="form-group col-md-1">
+					<select class="form-control pagination" id="pageSizeSelect">
+						<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
+							th:value="${pageSize}"
+							th:selected="${pageSize} == ${selectedPageSize}"></option>
+					</select>
+				</div>
+				<div th:if="${employees.totalPages != 1}"
+					class="form-group col-md-11 pagination-centered">
+					<ul class="pagination">
+						<li th:class="${employees.number == 0} ? disabled"><a
+							class="pageLink"
+							th:href="@{/admin/home(pageSize=${selectedPageSize}, page=1)}">«</a>
+						</li>
+						<li th:class="${employees.number == 0} ? disabled"><a
+							class="pageLink"
+							th:href="@{/admin/home(pageSize=${selectedPageSize}, page=${employees.number})}">←</a>
+						</li>
+						<li
+							th:class="${employees.number == (page - 1)} ? 'active pointer-disabled'"
+							th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+							<a class="pageLink"
+							th:href="@{/admin/home(pageSize=${selectedPageSize}, page=${page})}"
+							th:text="${page}"></a>
+						</li>
+						<li
+							th:class="${employees.number + 1 == employees.totalPages} ? disabled">
+							<a class="pageLink"
+							th:href="@{/admin/home(pageSize=${selectedPageSize}, page=${employees.number + 2})}">→</a>
+						</li>
+						<li
+							th:class="${employees.number + 1 == employees.totalPages} ? disabled">
+							<a class="pageLink"
+							th:href="@{/admin/home(pageSize=${selectedPageSize}, page=${employees.totalPages})}">»</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script th:inline="javascript">
+		$(document).ready(function() {
+			changePageAndSize();
+		});
+
+		function changePageAndSize() {
+			$('#pageSizeSelect').change(
+					function(evt) {
+						window.location.replace("/admin/home?pageSize="
+								+ this.value + "&page=1");
+					});
+		}
+	</script>
 </body>
 </html>
