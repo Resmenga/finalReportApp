@@ -23,8 +23,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 	
-	@Value("${spring.queries.users-query}")
-	private String usersQuery;
+	@Value("${spring.queries.employees-query}")
+	private String employeesQuery;
 	
 	@Value("${spring.queries.roles-query}")
 	private String rolesQuery;
@@ -34,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			throws Exception {
 		auth.
 			jdbcAuthentication()
-				.usersByUsernameQuery(usersQuery)
+				.usersByUsernameQuery(employeesQuery)
 				.authoritiesByUsernameQuery(rolesQuery)
 				.dataSource(dataSource)
 				.passwordEncoder(bCryptPasswordEncoder);

@@ -25,8 +25,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
-	public Employee findEmployeeByFirstName(String firstName) {
-		return employeeRepository.findByFirstName(firstName);
+	public Employee findEmployeeByEmail(String email) {
+		return employeeRepository.findByEmail(email);
 	}
 
 	@Override
@@ -36,7 +36,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         Role employeeRole = roleRepository.findByRole("ADMIN");
         employee.setRoles(new HashSet<Role>(Arrays.asList(employeeRole)));
         employeeRepository.save(employee);
-		
 	}
 	
 

@@ -7,5 +7,5 @@ import com.org.andreorg.reportapp.model.Employee;
 
 @Repository("employeeRepository")
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-	Employee findByFirstName(String firstName);
+	Employee findByEmail(String email);
 }
