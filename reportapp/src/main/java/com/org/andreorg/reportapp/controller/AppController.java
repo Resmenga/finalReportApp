@@ -71,6 +71,12 @@ public class AppController {
 		return modelAndView;
 	}
 	
+	@RequestMapping(value="/admin/deleteEmployee", method = RequestMethod.POST)
+	public ModelAndView deleteEmployee(@RequestParam("empID") Long id){
+		employeeRepository.deleteById(id); //TODO: call service instead?
+		return new ModelAndView("redirect:/admin/home?pageSize="+INITIAL_PAGE_SIZE+"&page="+INITIAL_PAGE);
+	}
+	
 	@RequestMapping(value="/admin/addEmployee", method = RequestMethod.GET)
 	public ModelAndView getCreateNewEmployeePage(){
 		ModelAndView modelAndView = new ModelAndView();
