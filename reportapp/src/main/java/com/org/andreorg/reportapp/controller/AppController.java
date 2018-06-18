@@ -1,5 +1,6 @@
 package com.org.andreorg.reportapp.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.org.andreorg.reportapp.export.ExcelReportView;
 import com.org.andreorg.reportapp.model.Employee;
 import com.org.andreorg.reportapp.model.PagerModel;
 import com.org.andreorg.reportapp.repository.EmployeeRepository;
@@ -149,5 +151,10 @@ public class AppController {
 		employeeService.updateEmployee(employee);
 		return new ModelAndView("redirect:/admin/updateEmployee/" + employee.getEmpID());
 	}
-
+	
+@RequestMapping(value = "/admin/report", method = RequestMethod.GET)
+   public ModelAndView getExcel(){
+          List<Employee> employeeList = (List<Employee>) employeeRepository.findAll();
+          return new ModelAndView(new ExcelReportView(), "employeeList", employeeList);
+   }
 }
