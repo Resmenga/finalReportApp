@@ -75,13 +75,16 @@ public class Employee {
 	}
 	
 	public Employee(String firstName, String lastName, int salary, int departmentID,
-			int phoneNumber, String address) {
+			int phoneNumber, String address, String email, String password, int active) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.salary = salary;
 		this.departmentID = departmentID;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
+		this.email = email;
+		this.password = password;
+		this.active = active;
 		this.crtTimeStamp = new Date();
 	}
 
@@ -186,8 +189,7 @@ public class Employee {
 	public String toString() {
 		return "Employee [empID=" + empID + ", firstName=" + firstName + ", lastName=" + lastName + ", salary=" + salary
 				+ ", departmentID=" + departmentID + ", phoneNumber=" + phoneNumber + ", address=" + address
+				+ ", email=" + email + ", password=" + password + ", active=" + active + ", roles=" + roles
 				+ ", crtTimeStamp=" + crtTimeStamp + "]";
 	}
-	
-	
 }
