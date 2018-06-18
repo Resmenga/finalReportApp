@@ -11,10 +11,10 @@ import javax.persistence.Table;
 @Table(name = "role")
 public class Role {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="role_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "role_id", updatable = false, nullable = false)
 	private int id;
-	@Column(name="role")
+	@Column(name = "role", updatable = false, nullable = false)
 	private String role;
 	
 	public int getId() {
