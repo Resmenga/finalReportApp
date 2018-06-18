@@ -31,7 +31,7 @@ public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "emp_id", updatable = false, nullable = false)
-	private int empID;
+	private Long empID;
 
 	@Column(name = "first_name", updatable = false, nullable = false)
 	private String firstName;
@@ -64,7 +64,7 @@ public class Employee {
 	@Column(name = "active")
 	private int active;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "emp_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 	
@@ -75,21 +75,24 @@ public class Employee {
 	}
 	
 	public Employee(String firstName, String lastName, int salary, int departmentID,
-			int phoneNumber, String address) {
+			int phoneNumber, String address, String email, String password, int active) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.salary = salary;
 		this.departmentID = departmentID;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
+		this.email = email;
+		this.password = password;
+		this.active = active;
 		this.crtTimeStamp = new Date();
 	}
 
-	public int getEmpID() {
+	public Long getEmpID() {
 		return empID;
 	}
 
-	public void setEmpID(int empID) {
+	public void setEmpID(Long empID) {
 		this.empID = empID;
 	}
 
@@ -186,8 +189,7 @@ public class Employee {
 	public String toString() {
 		return "Employee [empID=" + empID + ", firstName=" + firstName + ", lastName=" + lastName + ", salary=" + salary
 				+ ", departmentID=" + departmentID + ", phoneNumber=" + phoneNumber + ", address=" + address
+				+ ", email=" + email + ", password=" + password + ", active=" + active + ", roles=" + roles
 				+ ", crtTimeStamp=" + crtTimeStamp + "]";
 	}
-	
-	
 }
