@@ -151,10 +151,10 @@ public class AppController {
 		employeeService.updateEmployee(employee);
 		return new ModelAndView("redirect:/admin/updateEmployee/" + employee.getEmpID());
 	}
-	
-@RequestMapping(value = "/admin/report", method = RequestMethod.GET)
-   public ModelAndView getExcel(){
-          List<Employee> employeeList = (List<Employee>) employeeRepository.findAll();
-          return new ModelAndView(new ExcelReportView(), "employeeList", employeeList);
-   }
+
+	@RequestMapping(value = "/admin/report", method = RequestMethod.GET)
+	public ModelAndView getExcel() {
+		List<Employee> employeeList = (List<Employee>) employeeRepository.findAll();
+		return new ModelAndView(new ExcelReportView(), "employeeList", employeeList);
+	}
 }
