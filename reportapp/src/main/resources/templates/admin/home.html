@@ -31,7 +31,6 @@
 				new Employee</button>
 		</form>
 	</div>
-
 	<div class="container-fluid">
 		<div class="page-title">
 			<h2>Employee Table</h2>
@@ -64,10 +63,14 @@
 						<td th:text="${employee.departmentID}">Placeholder</td>
 						<td th:text="${employee.salary}">Placeholder</td>
 						<td th:text="${employee.crtTimeStamp}">Placeholder</td>
-						<td><form th:action="@{/admin/updateEmployee(empID=${employee.empID})}" method="post">
-						<button class="btn btn-primary btn-condensed" type="submit">
+						<td>
+
+						<td><form th:action="@{/admin/updateEmployee/{path}(path=${employee.empID})}" method="get">
+						<button class="btn btn-danger btn-condensed" type="submit">
   							 <span class="glyphicon glyphicon-edit"></span>
-						</button></form></td>	
+						</button></form></td>
+						
+						
 						<td><form th:action="@{/admin/deleteEmployee(empID=${employee.empID})}" method="post">
 						<button class="btn btn-danger btn-condensed" type="submit">
   							 <span class="glyphicon glyphicon-trash"></span>
