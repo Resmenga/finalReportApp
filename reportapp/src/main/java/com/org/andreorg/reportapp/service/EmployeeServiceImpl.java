@@ -36,4 +36,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setRoles(new HashSet<Role>(Arrays.asList(employeeRole)));
         employeeRepository.save(employee);
 	}
+	
+	@Override
+	public Employee updateEmployee(Employee employee) {
+		//TODO add validations
+		return employeeRepository.updateEmployee(employee);
+	}
 }
