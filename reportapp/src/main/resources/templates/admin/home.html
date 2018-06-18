@@ -11,47 +11,60 @@
 </head>
 
 <body>
+
+
 	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".navbar-collapse">
+				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
 
-		<form th:action="@{/logout}" method="get">
-			<button class="btn btn-md btn-danger btn-block" type="Submit">Logout</button>
-		</form>
-
-		<div class="panel-group" style="margin-top: 40px">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<span th:utext="${employeeName}"></span>
+			</button>
+			<a class="navbar-brand" href="#">Report App</a>
+		</div>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a th:href="@{/admin/home}">Home</a></li>
+			<li><a th:href="@{/admin/addEmployee}">Add Employee</a></li>
+			<li><a th:href="@{/logout}">Logout</a></li>
+		</ul>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="container">
+		<form th:action="@{/admin/home?pageSize=5&?page=1}" method="get">
+			<div class="input-append">
+				<div class="form-group row">
+					<div class="col-xs-2">
+						<label>Search by</label> <select class="form-control"
+							name="searchOption">
+							<option value="empID">Employee ID</option>
+							<option value="fName">First Name</option>
+							<option value="lName">Last Name</option>
+							<option value="email">Email</option>
+							<option value="deptID">Department ID</option>
+							<option value="salary">Salary</option>
+						</select>
+					</div>
+					<div class="col-xs-3">
+						<label>Value</label> <input class="form-control" id="ex2"
+							type="text" name="searchOptionValue">
+					</div>
+					<button type="submit" class="btn-custom btn btn-primary">Submit</button>
 				</div>
 			</div>
-		</div>
-
-		<form th:action="@{/admin/addEmployee}" method="get">
-			<button class="btn btn-lg btn-primary btn-block" type="Submit">Create
-				new Employee</button>
 		</form>
 	</div>
-	
-	<form th:action="@{/admin/home?pageSize=5&?page=1}" method="get">
-		<div class="form-group row">
-			<div class="col-xs-2">
-				<label>Search by</label> <select class="form-control" name="searchOption">
-					<option value="empID">Employee ID</option>
-					<option value="fName">First Name</option>
-					<option value="lName">Last Name</option>
-					<option value="email">Email</option>
-					<option value="deptID">Department ID</option>
-					<option value="salary">Salary</option>
-				</select>
-			</div>
-			<div class="col-xs-3">
-				<label>Value</label> <input class="form-control"
-					id="ex2" type="text" name="searchOptionValue">
-			</div>
-		</div>
-		<button type="submit" class="btn btn-primary">Submit</button>
-	</form>
 
-	<div class="container-fluid">
+	<div class="container">
 		<div class="page-title">
 			<h2>Employee Table</h2>
 		</div>
@@ -83,14 +96,11 @@
 						<td th:text="${employee.departmentID}">Placeholder</td>
 						<td th:text="${employee.salary}">Placeholder</td>
 						<td th:text="${employee.crtTimeStamp}">Placeholder</td>
-						<td>
 
 						<td><form th:action="@{/admin/updateEmployee/{path}(path=${employee.empID})}" method="get">
-						<button class="btn btn-danger btn-condensed" type="submit">
+						<button class="btn btn-info btn-condensed" type="submit">
   							 <span class="glyphicon glyphicon-edit"></span>
-						</button></form></td>
-						
-						
+						</button></form></td>	
 						<td><form th:action="@{/admin/deleteEmployee(empID=${employee.empID})}" method="post">
 						<button class="btn btn-danger btn-condensed" type="submit">
   							 <span class="glyphicon glyphicon-trash"></span>

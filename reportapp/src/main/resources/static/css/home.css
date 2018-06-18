@@ -16,3 +16,7 @@
 .pointer-disabled {
 	pointer-events: none;
 }
+
+.btn-custom{
+	 margin-top: 24px;
+}
