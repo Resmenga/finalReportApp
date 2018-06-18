@@ -31,7 +31,7 @@ public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "emp_id", updatable = false, nullable = false)
-	private int empID;
+	private Long empID;
 
 	@Column(name = "first_name", updatable = false, nullable = false)
 	private String firstName;
@@ -64,7 +64,7 @@ public class Employee {
 	@Column(name = "active")
 	private int active;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "emp_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 	
@@ -88,11 +88,11 @@ public class Employee {
 		this.crtTimeStamp = new Date();
 	}
 
-	public int getEmpID() {
+	public Long getEmpID() {
 		return empID;
 	}
 
-	public void setEmpID(int empID) {
+	public void setEmpID(Long empID) {
 		this.empID = empID;
 	}
 
