@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Employees Report App</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".navbar-collapse">
+				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span>
+
+			</button>
+			<a class="navbar-brand" href="#">Report App</a>
+		</div>
+		<ul class="nav navbar-nav navbar-right">
+			<li><a th:href="@{/admin/home}">Home</a></li>
+			<li><a th:href="@{/admin/addEmployee}">Add Employee</a></li>
+			<li><a th:href="@{/admin/report}">Export All Data</a></li>
+			<li><a th:href="@{/logout}">Logout</a></li>
+		</ul>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="container">
+		<form th:action="@{/admin/home?pageSize=5&?page=1}" method="get">
+			<div class="input-append">
+				<div class="form-group row">
+					<div class="col-xs-2">
+						<label>Search by</label> <select class="form-control"
+							name="searchOption">
+							<option value="empID">Employee ID</option>
+							<option value="fName">First Name</option>
+							<option value="lName">Last Name</option>
+							<option value="email">Email</option>
+							<option value="deptID">Department ID</option>
+							<option value="salary">Salary</option>
+						</select>
+					</div>
+					<div class="col-xs-3">
+						<label>Value</label> <input class="form-control" id="ex2"
+							type="text" name="searchOptionValue">
+					</div>
+					<button type="submit" class="btn-custom btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="container">
+		<div class="page-title">
+			<h2>Employee Table</h2>
+		</div>
+		<div class="row">
+			<table class="table datatable">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Address</th>
+						<th>Email</th>
+						<th>Phone Number</th>
+						<th>Department ID</th>
+						<th>Salary</th>
+						<th>Time Stamp</th>
+						<th>Update</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="employee : ${employees}">
+						<td th:text="${employee.empID}">Placeholder</td>
+						<td th:text="${employee.firstName}">Placeholder</td>
+						<td th:text="${employee.lastName}">Placeholder</td>
+						<td th:text="${employee.address}">Placeholder</td>
+						<td th:text="${employee.email}">Placeholder</td>
+						<td th:text="${employee.phoneNumber}">Placeholder</td>
+						<td th:text="${employee.departmentID}">Placeholder</td>
+						<td th:text="${employee.salary}">Placeholder</td>
+						<td th:text="${employee.crtTimeStamp}">Placeholder</td>
+
+						<td><form th:action="@{/admin/updateEmployee/{path}(path=${employee.empID})}" method="get">
+						<button class="btn btn-info btn-condensed" type="submit">
+  							 <span class="glyphicon glyphicon-edit"></span>
+						</button></form></td>	
+						<td><form th:action="@{/admin/deleteEmployee(empID=${employee.empID})}" method="post">
+						<button class="btn btn-danger btn-condensed" type="submit">
+  							 <span class="glyphicon glyphicon-trash"></span>
+						</button></form></td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<div class="row">
+				<div class="form-group col-md-1">
+					<select class="form-control pagination" id="pageSizeSelect">
+						<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
+							th:value="${pageSize}"
+							th:selected="${pageSize} == ${selectedPageSize}"></option>
+					</select>
+				</div>
+				<div th:if="${employees.totalPages != 1}"
+					class="form-group col-md-11 pagination-centered">
+					<ul class="pagination">
+						<li th:class="${employees.number == 0} ? disabled"><a
+							class="pageLink"
+							th:href="@{/admin/home(pageSize=${selectedPageSize}, page=1)}">«</a>
+						</li>
+						<li th:class="${employees.number == 0} ? disabled"><a
+							class="pageLink"
+							th:href="@{/admin/home(pageSize=${selectedPageSize}, page=${employees.number})}">←</a>
+						</li>
+						<li
+							th:class="${employees.number == (page - 1)} ? 'active pointer-disabled'"
+							th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+							<a class="pageLink"
+							th:href="@{/admin/home(pageSize=${selectedPageSize}, page=${page})}"
+							th:text="${page}"></a>
+						</li>
+						<li
+							th:class="${employees.number + 1 == employees.totalPages} ? disabled">
+							<a class="pageLink"
+							th:href="@{/admin/home(pageSize=${selectedPageSize}, page=${employees.number + 2})}">→</a>
+						</li>
+						<li
+							th:class="${employees.number + 1 == employees.totalPages} ? disabled">
+							<a class="pageLink"
+							th:href="@{/admin/home(pageSize=${selectedPageSize}, page=${employees.totalPages})}">»</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script th:inline="javascript">
+		$(document).ready(function() {
+			changePageAndSize();
+		});
+
+		function changePageAndSize() {
+			$('#pageSizeSelect').change(
+					function(evt) {
+						window.location.replace("/admin/home?pageSize="
+								+ this.value + "&page=1");
+					});
+		}
+	</script>
+</body>
+</html>
