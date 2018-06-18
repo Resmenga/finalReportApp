@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -45,7 +46,9 @@ public class AppController {
 
 	@RequestMapping(value = "/admin/home", method = RequestMethod.GET)
 	public ModelAndView getHomePage(@RequestParam("pageSize") Optional<Integer> pageSize,
-			@RequestParam("page") Optional<Integer> page) {
+			@RequestParam("page") Optional<Integer> page,
+			@RequestParam(value = "searchOption", defaultValue = "empty", required = false) String searchOption,
+			@RequestParam(value = "searchOptionValue", defaultValue = "empty", required = false) String searchOptionValue) {
 		// page size
 		int evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE);
 		// Evaluate page. If requested parameter is null or less than 0 (to
@@ -60,8 +63,34 @@ public class AppController {
 				"Welcome " + employee.getFirstName() + " " + employee.getLastName() + " (" + employee.getEmail() + ")");
 		modelAndView.addObject("adminMessage", "Content Available Only for Employees with Admin Role");
 		modelAndView.setViewName("admin/home");
+
 		// TODO: call service instead?
+		// TODO: Refactor this part and deal with nested ifs
 		Page<Employee> employees = employeeRepository.findAll(PageRequest.of(evalPage, evalPageSize));
+		if (!searchOption.equals("empty") && !searchOptionValue.equals("empty")) {
+			Pageable pageable = PageRequest.of(evalPage, evalPageSize);
+			if (searchOption.equalsIgnoreCase("fName")) {
+				employees = employeeRepository.findByFirstName(pageable, searchOptionValue);
+			} else if (searchOption.equalsIgnoreCase("lName")) {
+				employees = employeeRepository.findByLastName(pageable, searchOptionValue);
+			} else if (searchOption.equalsIgnoreCase("email")) {
+				employees = employeeRepository.findByEmail(pageable, searchOptionValue);
+			} else if (searchOption.equalsIgnoreCase("deptID")) {
+				if (EmployeeService.isNumeric(searchOptionValue)) {
+					employees = employeeRepository.findByDepartmentID(pageable, Integer.parseInt(searchOptionValue));
+				}
+			} else if (searchOption.equalsIgnoreCase("empID")) {
+				if (EmployeeService.isNumeric(searchOptionValue)) {
+					employees = employeeRepository.findByEmpID(pageable, Long.parseLong(searchOptionValue));
+				}
+			} else if (searchOption.equalsIgnoreCase("salary")) {
+				if (EmployeeService.isNumeric(searchOptionValue)) {
+					employees = employeeRepository.findBySalary(pageable, Integer.parseInt(searchOptionValue));
+				}
+			}
+		} else {
+			employees = employeeRepository.findAll(PageRequest.of(evalPage, evalPageSize));
+		}
 
 		PagerModel pager = new PagerModel(employees.getTotalPages(), employees.getNumber(), BUTTONS_TO_SHOW);
 		modelAndView.addObject("employees", employees);

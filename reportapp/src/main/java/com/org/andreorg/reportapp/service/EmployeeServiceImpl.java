@@ -39,7 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Override
 	public Employee updateEmployee(Employee employee) {
-		//TODO add validations
 		return employeeRepository.updateEmployee(employee);
 	}
+
 }

@@ -5,10 +5,9 @@
 <head>
 <title>Employees Report App</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -31,6 +30,27 @@
 				new Employee</button>
 		</form>
 	</div>
+	
+	<form th:action="@{/admin/home?pageSize=5&?page=1}" method="get">
+		<div class="form-group row">
+			<div class="col-xs-2">
+				<label>Search by</label> <select class="form-control" name="searchOption">
+					<option value="empID">Employee ID</option>
+					<option value="fName">First Name</option>
+					<option value="lName">Last Name</option>
+					<option value="email">Email</option>
+					<option value="deptID">Department ID</option>
+					<option value="salary">Salary</option>
+				</select>
+			</div>
+			<div class="col-xs-3">
+				<label>Value</label> <input class="form-control"
+					id="ex2" type="text" name="searchOptionValue">
+			</div>
+		</div>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+
 	<div class="container-fluid">
 		<div class="page-title">
 			<h2>Employee Table</h2>
