@@ -44,7 +44,7 @@
 				<div class="form-group row">
 					<div class="col-xs-2">
 						<label>Search by</label> <select class="form-control"
-							name="searchOption">
+							name="searchOption" id="searchOption">
 							<option value="empID">Employee ID</option>
 							<option value="fName">First Name</option>
 							<option value="lName">Last Name</option>
@@ -54,8 +54,8 @@
 						</select>
 					</div>
 					<div class="col-xs-3">
-						<label>Value</label> <input class="form-control" id="ex2"
-							type="text" name="searchOptionValue">
+						<label>Value</label> <input class="form-control" id="searchOptionValue"
+							type="number" name="searchOptionValue">
 					</div>
 					<button type="submit" class="btn-custom btn btn-primary">Submit</button>
 				</div>
@@ -163,6 +163,19 @@
 								+ this.value + "&page=1");
 					});
 		}
+
+		function searchOptionChange() {
+			console.log("mudou value is " + this.value);
+			var inputBox = document.getElementById('searchOptionValue');
+
+			this.value == 'empID'
+			this.value == 'empID' || this.value == 'salary'
+					|| this.value == 'deptID' ? inputBox.type = 'number'
+					: inputBox.type = 'text';
+		}
+
+		document.getElementById('searchOption').addEventListener('change',
+				searchOptionChange);
 	</script>
 </body>
 </html>
