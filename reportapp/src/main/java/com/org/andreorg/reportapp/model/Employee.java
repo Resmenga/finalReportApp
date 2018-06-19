@@ -4,7 +4,6 @@ package com.org.andreorg.reportapp.model;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +20,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Email;
-import org.springframework.data.annotation.Transient;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Entity
 @DynamicUpdate
@@ -34,34 +34,43 @@ public class Employee {
 	private Long empID;
 
 	@Column(name = "first_name", updatable = false, nullable = false)
+	@NotEmpty(message = "*Please provide a first name")
 	private String firstName;
 
 	@Column(name = "last_name", updatable = false, nullable = false)
+	@NotEmpty(message = "*Please provide a last name")
 	private String lastName;
 
-	@Column(name = "salary")
+	@Column(name = "salary", nullable = false)
+	@Min(1)
+    @Max(999999999)
 	private int salary;
 
-	@Column(name = "dept_id")
+	@Column(name = "dept_id", nullable = false)
+	@Min(1)
+    @Max(999999999)
 	private int departmentID;
 
-	@Column(name = "ph_number")
+	@Column(name = "ph_number", nullable = false)
+	@Min(1)
+    @Max(999999999)
 	private int phoneNumber;
 	
-	@Column(name = "address")
+	@Column(name = "address", nullable = false)
+	@NotEmpty(message = "*Please provide an address")
 	private String address;
 	
-	@Column(name = "email")
+	@Column(name = "email", nullable = false)
 	@Email(message = "*Please provide a valid Email")
 	@NotEmpty(message = "*Please provide an email")
 	private String email;
 	
-	@Column(name = "password")
-	@Length(min = 5, message = "*Your password must have at least 5 characters")
-	@NotEmpty(message = "*Please provide your password")
+	@Column(name = "password", nullable = false)
+	@Length(min = 5, message = "*Password must have at least 5 characters")
+	@NotEmpty(message = "*Please provide a password")
 	private String password;
 	
-	@Column(name = "active")
+	@Column(name = "active", nullable = false)
 	private int active;
 	
 	@ManyToMany
