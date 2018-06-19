@@ -137,24 +137,27 @@ public class AppController {
 	}
 
 	@RequestMapping(value = "/admin/updateEmployee/{empID}", method = RequestMethod.GET)
-	public ModelAndView getUpdateEmployeePage(@PathVariable("empID") Long id) {
+	public ModelAndView getUpdateEmployeePage(@PathVariable("empID") Long id, 
+			@RequestParam(value = "successMessage", defaultValue = "false", required = false) String successMessage) {
 		ModelAndView modelAndView = new ModelAndView();
 		Optional<Employee> employee = employeeRepository.findById(id);
 		modelAndView.addObject("employee", employee);
 		modelAndView.setViewName("admin/updateEmployee");
-		modelAndView.addObject("successMessage", "Employee has been updated successfully");
+		if(successMessage.equalsIgnoreCase("true")) {
+			modelAndView.addObject("successMessage", "Employee has been updated successfully");
+		}
 		return modelAndView;
 	}
 
 	@RequestMapping(value = "/admin/updateEmployee", method = RequestMethod.POST)
 	public ModelAndView updateEmployee(@Valid Employee employee, BindingResult bindingResult) {
 		employeeService.updateEmployee(employee);
-		return new ModelAndView("redirect:/admin/updateEmployee/" + employee.getEmpID());
+		return new ModelAndView("redirect:/admin/updateEmployee/" + employee.getEmpID()+"?successMessage=true");
 	}
-	
-@RequestMapping(value = "/admin/report", method = RequestMethod.GET)
-   public ModelAndView getExcel(){
-          List<Employee> employeeList = (List<Employee>) employeeRepository.findAll();
-          return new ModelAndView(new ExcelReportView(), "employeeList", employeeList);
-   }
+
+	@RequestMapping(value = "/admin/report", method = RequestMethod.GET)
+	public ModelAndView getExcel() {
+		List<Employee> employeeList = (List<Employee>) employeeRepository.findAll();
+		return new ModelAndView(new ExcelReportView(), "employeeList", employeeList);
+	}
 }
