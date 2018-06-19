@@ -78,17 +78,11 @@ public class AppController {
 			} else if (searchOption.equalsIgnoreCase("email")) {
 				employees = employeeRepository.findByEmail(pageable, searchOptionValue);
 			} else if (searchOption.equalsIgnoreCase("deptID")) {
-				if (EmployeeService.isNumeric(searchOptionValue)) {
 					employees = employeeRepository.findByDepartmentID(pageable, Integer.parseInt(searchOptionValue));
-				}
 			} else if (searchOption.equalsIgnoreCase("empID")) {
-				if (EmployeeService.isNumeric(searchOptionValue)) {
 					employees = employeeRepository.findByEmpID(pageable, Long.parseLong(searchOptionValue));
-				}
 			} else if (searchOption.equalsIgnoreCase("salary")) {
-				if (EmployeeService.isNumeric(searchOptionValue)) {
 					employees = employeeRepository.findBySalary(pageable, Integer.parseInt(searchOptionValue));
-				}
 			}
 		} else {
 			employees = employeeRepository.findAll(PageRequest.of(evalPage, evalPageSize));
