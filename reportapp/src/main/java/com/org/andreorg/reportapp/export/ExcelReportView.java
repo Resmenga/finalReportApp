@@ -20,7 +20,7 @@ public class ExcelReportView extends AbstractXlsView {
 			HttpServletResponse response) throws Exception {
 
 		response.setHeader("Content-Disposition", "attachment;filename=\"employee.xls\"");
-		//TODO: check fix for this warning
+		@SuppressWarnings("unchecked")
 		List<Employee> employeeList = (List<Employee>) model.get("employeeList");
 		Sheet sheet = workbook.createSheet("Employee Data");
 		Row header = sheet.createRow(0);
