@@ -62,27 +62,7 @@ public class AppController {
 		modelAndView.addObject("adminMessage", "Content Available Only for Employees with Admin Role");
 		modelAndView.setViewName("admin/home");
 
-		// TODO: call service instead?
-		// TODO: Refactor this part and deal with nested ifs
-		Page<Employee> employees = employeeService.findAllEmployees(PageRequest.of(evalPage, evalPageSize));
-		if (!searchOption.equals("empty") && !searchOptionValue.equals("empty")) {
-			Pageable pageable = PageRequest.of(evalPage, evalPageSize);
-			if (searchOption.equalsIgnoreCase("fName")) {
-				employees = employeeService.findByFirstName(pageable, searchOptionValue);
-			} else if (searchOption.equalsIgnoreCase("lName")) {
-				employees = employeeService.findByLastName(pageable, searchOptionValue);
-			} else if (searchOption.equalsIgnoreCase("email")) {
-				employees = employeeService.findByEmail(pageable, searchOptionValue);
-			} else if (searchOption.equalsIgnoreCase("deptID")) {
-					employees = employeeService.findByDepartmentID(pageable, Integer.parseInt(searchOptionValue));
-			} else if (searchOption.equalsIgnoreCase("empID")) {
-					employees = employeeService.findByEmpID(pageable, Long.parseLong(searchOptionValue));
-			} else if (searchOption.equalsIgnoreCase("salary")) {
-					employees = employeeService.findBySalary(pageable, Integer.parseInt(searchOptionValue));
-			}
-		} else {
-			employees = employeeService.findAll(PageRequest.of(evalPage, evalPageSize));
-		}
+		Page<Employee> employees = checkSearchOption(searchOption, searchOptionValue, evalPageSize, evalPage);
 
 		PagerModel pager = new PagerModel(employees.getTotalPages(), employees.getNumber(), BUTTONS_TO_SHOW);
 		modelAndView.addObject("employees", employees);
@@ -94,7 +74,7 @@ public class AppController {
 
 	@RequestMapping(value = "/admin/deleteEmployee", method = RequestMethod.POST)
 	public ModelAndView deleteEmployee(@RequestParam("empID") Long id) {
-		employeeService.deleteById(id); // TODO: call service instead?
+		employeeService.deleteById(id);
 		return new ModelAndView("redirect:/admin/home?pageSize=" + INITIAL_PAGE_SIZE + "&page=" + INITIAL_PAGE);
 	}
 
@@ -127,13 +107,13 @@ public class AppController {
 	}
 
 	@RequestMapping(value = "/admin/updateEmployee/{empID}", method = RequestMethod.GET)
-	public ModelAndView getUpdateEmployeePage(@PathVariable("empID") Long id, 
+	public ModelAndView getUpdateEmployeePage(@PathVariable("empID") Long id,
 			@RequestParam(value = "successMessage", defaultValue = "false", required = false) String successMessage) {
 		ModelAndView modelAndView = new ModelAndView();
 		Optional<Employee> employee = employeeService.findById(id);
 		modelAndView.addObject("employee", employee);
 		modelAndView.setViewName("admin/updateEmployee");
-		if(successMessage.equalsIgnoreCase("true")) {
+		if (successMessage.equalsIgnoreCase("true")) {
 			modelAndView.addObject("successMessage", "Employee has been updated successfully");
 		}
 		return modelAndView;
@@ -142,12 +122,36 @@ public class AppController {
 	@RequestMapping(value = "/admin/updateEmployee", method = RequestMethod.POST)
 	public ModelAndView updateEmployee(@Valid Employee employee, BindingResult bindingResult) {
 		employeeService.updateEmployee(employee);
-		return new ModelAndView("redirect:/admin/updateEmployee/" + employee.getEmpID()+"?successMessage=true");
+		return new ModelAndView("redirect:/admin/updateEmployee/" + employee.getEmpID() + "?successMessage=true");
 	}
 
 	@RequestMapping(value = "/admin/report", method = RequestMethod.GET)
 	public ModelAndView getExcel() {
 		List<Employee> employeeList = (List<Employee>) employeeService.findAll();
 		return new ModelAndView(new ExcelReportView(), "employeeList", employeeList);
+	}
+
+	private Page<Employee> checkSearchOption(String searchOption, String searchOptionValue, int evalPageSize,
+			int evalPage) {
+		if (searchOption.equals("empty") || searchOptionValue.equals("empty")) {
+			return employeeService.findAll(PageRequest.of(evalPage, evalPageSize));
+		}
+		Pageable pageable = PageRequest.of(evalPage, evalPageSize);
+		switch (searchOption) {
+		case "empID":
+			return employeeService.findByEmpID(pageable, Long.parseLong(searchOptionValue));
+		case "fName":
+			return employeeService.findByFirstName(pageable, searchOptionValue);
+		case "lName":
+			return employeeService.findByLastName(pageable, searchOptionValue);
+		case "email":
+			return employeeService.findByEmail(pageable, searchOptionValue);
+		case "deptID":
+			return employeeService.findByDepartmentID(pageable, Integer.parseInt(searchOptionValue));
+		case "salary":
+			return employeeService.findBySalary(pageable, Integer.parseInt(searchOptionValue));
+		default:
+			return employeeService.findAll(PageRequest.of(evalPage, evalPageSize));
+		}
 	}
 }
