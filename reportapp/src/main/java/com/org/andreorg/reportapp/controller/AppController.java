@@ -22,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.org.andreorg.reportapp.export.ExcelReportView;
 import com.org.andreorg.reportapp.model.Employee;
 import com.org.andreorg.reportapp.model.PagerModel;
-import com.org.andreorg.reportapp.repository.EmployeeRepository;
 import com.org.andreorg.reportapp.service.EmployeeService;
 
 @Controller
@@ -35,9 +34,6 @@ public class AppController {
 
 	@Autowired
 	private EmployeeService employeeService;
-
-	@Autowired
-	private EmployeeRepository employeeRepository;
 
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
 	public ModelAndView getLoginPage() {
@@ -68,24 +64,24 @@ public class AppController {
 
 		// TODO: call service instead?
 		// TODO: Refactor this part and deal with nested ifs
-		Page<Employee> employees = employeeRepository.findAll(PageRequest.of(evalPage, evalPageSize));
+		Page<Employee> employees = employeeService.findAllEmployees(PageRequest.of(evalPage, evalPageSize));
 		if (!searchOption.equals("empty") && !searchOptionValue.equals("empty")) {
 			Pageable pageable = PageRequest.of(evalPage, evalPageSize);
 			if (searchOption.equalsIgnoreCase("fName")) {
-				employees = employeeRepository.findByFirstName(pageable, searchOptionValue);
+				employees = employeeService.findByFirstName(pageable, searchOptionValue);
 			} else if (searchOption.equalsIgnoreCase("lName")) {
-				employees = employeeRepository.findByLastName(pageable, searchOptionValue);
+				employees = employeeService.findByLastName(pageable, searchOptionValue);
 			} else if (searchOption.equalsIgnoreCase("email")) {
-				employees = employeeRepository.findByEmail(pageable, searchOptionValue);
+				employees = employeeService.findByEmail(pageable, searchOptionValue);
 			} else if (searchOption.equalsIgnoreCase("deptID")) {
-					employees = employeeRepository.findByDepartmentID(pageable, Integer.parseInt(searchOptionValue));
+					employees = employeeService.findByDepartmentID(pageable, Integer.parseInt(searchOptionValue));
 			} else if (searchOption.equalsIgnoreCase("empID")) {
-					employees = employeeRepository.findByEmpID(pageable, Long.parseLong(searchOptionValue));
+					employees = employeeService.findByEmpID(pageable, Long.parseLong(searchOptionValue));
 			} else if (searchOption.equalsIgnoreCase("salary")) {
-					employees = employeeRepository.findBySalary(pageable, Integer.parseInt(searchOptionValue));
+					employees = employeeService.findBySalary(pageable, Integer.parseInt(searchOptionValue));
 			}
 		} else {
-			employees = employeeRepository.findAll(PageRequest.of(evalPage, evalPageSize));
+			employees = employeeService.findAll(PageRequest.of(evalPage, evalPageSize));
 		}
 
 		PagerModel pager = new PagerModel(employees.getTotalPages(), employees.getNumber(), BUTTONS_TO_SHOW);
@@ -98,7 +94,7 @@ public class AppController {
 
 	@RequestMapping(value = "/admin/deleteEmployee", method = RequestMethod.POST)
 	public ModelAndView deleteEmployee(@RequestParam("empID") Long id) {
-		employeeRepository.deleteById(id); // TODO: call service instead?
+		employeeService.deleteById(id); // TODO: call service instead?
 		return new ModelAndView("redirect:/admin/home?pageSize=" + INITIAL_PAGE_SIZE + "&page=" + INITIAL_PAGE);
 	}
 
@@ -134,7 +130,7 @@ public class AppController {
 	public ModelAndView getUpdateEmployeePage(@PathVariable("empID") Long id, 
 			@RequestParam(value = "successMessage", defaultValue = "false", required = false) String successMessage) {
 		ModelAndView modelAndView = new ModelAndView();
-		Optional<Employee> employee = employeeRepository.findById(id);
+		Optional<Employee> employee = employeeService.findById(id);
 		modelAndView.addObject("employee", employee);
 		modelAndView.setViewName("admin/updateEmployee");
 		if(successMessage.equalsIgnoreCase("true")) {
@@ -151,7 +147,7 @@ public class AppController {
 
 	@RequestMapping(value = "/admin/report", method = RequestMethod.GET)
 	public ModelAndView getExcel() {
-		List<Employee> employeeList = (List<Employee>) employeeRepository.findAll();
+		List<Employee> employeeList = (List<Employee>) employeeService.findAll();
 		return new ModelAndView(new ExcelReportView(), "employeeList", employeeList);
 	}
 }
